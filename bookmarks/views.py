@@ -14,30 +14,31 @@ from django.utils.translation import ugettext_lazy as _
 from bookmarks.models import Bookmark, BookmarkInstance
 from bookmarks.forms import BookmarkInstanceForm
 
-def bookmarks(request):
+def bookmarks(request, template_name="bookmarks/bookmarks.html"):
     bookmarks = Bookmark.objects.all().order_by("-added")
     if request.user.is_authenticated():
         user_bookmarks = Bookmark.objects.filter(saved_instances__user=request.user)
     else:
         user_bookmarks = []
-    return render_to_response("bookmarks/bookmarks.html", {
+    return render_to_response(template_name, {
         "bookmarks": bookmarks,
         "user_bookmarks": user_bookmarks,
     }, context_instance=RequestContext(request))
 
 
 @login_required
-def your_bookmarks(request):
+def your_bookmarks(request, template_name="bookmarks/your_bookmarks.html"):
     bookmark_instances = BookmarkInstance.objects.filter(user=request.user).order_by("-saved")
-    return render_to_response("bookmarks/your_bookmarks.html", {
+    return render_to_response(template_name, {
         "bookmark_instances": bookmark_instances,
     }, context_instance=RequestContext(request))
 
 @login_required
-def add(request):
+def add(request, form_class=BookmarkInstanceForm,
+        template_name="bookmarks/add.html"):
     
     if request.method == "POST":
-        bookmark_form = BookmarkInstanceForm(request.user, request.POST)
+        bookmark_form = form_class(request.user, request.POST)
         if bookmark_form.is_valid():
             bookmark_instance = bookmark_form.save(commit=False)
             bookmark_instance.user = request.user
@@ -77,14 +78,14 @@ def add(request):
             initial["redirect"] = request.GET["redirect"]
         
         if initial:
-            bookmark_form = BookmarkInstanceForm(initial=initial)
+            bookmark_form = form_class(initial=initial)
         else:
-            bookmark_form = BookmarkInstanceForm()
+            bookmark_form = form_class()
     
     bookmarks_add_url = "http://" + Site.objects.get_current().domain + reverse(add)
     bookmarklet = "javascript:location.href='%s?url='+encodeURIComponent(location.href)+';description='+encodeURIComponent(document.title)+';redirect=on'" % bookmarks_add_url
     
-    return render_to_response("bookmarks/add.html", {
+    return render_to_response(template_name, {
         "bookmarklet": bookmarklet,
         "bookmark_form": bookmark_form,
     }, context_instance=RequestContext(request))
@@ -95,7 +96,7 @@ def delete(request, bookmark_instance_id):
     bookmark_instance = get_object_or_404(BookmarkInstance, id=bookmark_instance_id)
     if request.user == bookmark_instance.user:
         bookmark_instance.delete()
-        request.user.message_set.create(message="Bookmark Deleted")
+        request.user.message_set.create(message=_("Bookmark Deleted"))
         
     if "next" in request.GET:
         next = request.GET["next"]
