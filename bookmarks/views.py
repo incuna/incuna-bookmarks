@@ -5,7 +5,7 @@ import urllib2
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 
@@ -95,9 +95,12 @@ def delete(request, bookmark_instance_id):
     
     bookmark_instance = get_object_or_404(BookmarkInstance, id=bookmark_instance_id)
     if request.user == bookmark_instance.user:
+        #BookmarkInstance.objects.get(pk=bookmark_instance_id, user=request.user).delete()
         bookmark_instance.delete()
-        request.user.message_set.create(message=_("Bookmark Deleted"))
-        
+    
+        request.user.message_set.create(message=_("You have deleted bookmark '%(description)s'") % {'description': bookmark_instance.description})
+
+    
     if "next" in request.GET:
         next = request.GET["next"]
     else:
