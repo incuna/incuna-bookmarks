@@ -9,8 +9,8 @@ class Migration(DataMigration):
     def forwards(self, orm):
         "Write your forwards methods here."
         from django.conf import settings
-        for article in orm.Bookmark.objects.all():
-            article.sites = [settings.SITE_ID,]
+        for bookmark in orm.Bookmark.objects.all():
+            bookmark.sites = [settings.SITE_ID,]
 
     def backwards(self, orm):
         "Write your backwards methods here."
