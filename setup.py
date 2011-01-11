@@ -9,6 +9,7 @@ setup(
     url='http://code.google.com/p/django-bookmarks/',
     packages=[
         'bookmarks',
+        'bookmarks.migrations',
     ],
     package_dir={'bookmarks': 'bookmarks'},
     classifiers=[
