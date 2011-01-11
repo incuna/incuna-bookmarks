@@ -15,9 +15,9 @@ from bookmarks.models import Bookmark, BookmarkInstance
 from bookmarks.forms import BookmarkInstanceForm
 
 def bookmarks(request, template_name="bookmarks/bookmarks.html"):
-    bookmarks = Bookmark.objects.all().order_by("-added")
+    bookmarks = Bookmark.on_site.all().order_by("-added")
     if request.user.is_authenticated():
-        user_bookmarks = Bookmark.objects.filter(saved_instances__user=request.user)
+        user_bookmarks = Bookmark.on_site.filter(saved_instances__user=request.user)
     else:
         user_bookmarks = []
     return render_to_response(template_name, {
@@ -28,7 +28,7 @@ def bookmarks(request, template_name="bookmarks/bookmarks.html"):
 
 @login_required
 def your_bookmarks(request, template_name="bookmarks/your_bookmarks.html"):
-    bookmark_instances = BookmarkInstance.objects.filter(user=request.user).order_by("-saved")
+    bookmark_instances = BookmarkInstance.on_site.filter(user=request.user).order_by("-saved")
     return render_to_response(template_name, {
         "bookmark_instances": bookmark_instances,
     }, context_instance=RequestContext(request))
@@ -93,7 +93,7 @@ def add(request, form_class=BookmarkInstanceForm,
 @login_required
 def delete(request, bookmark_instance_id):
     
-    bookmark_instance = get_object_or_404(BookmarkInstance, id=bookmark_instance_id)
+    bookmark_instance = get_object_or_404(BookmarkInstance.on_site.all(), id=bookmark_instance_id)
     if request.user == bookmark_instance.user:
         #BookmarkInstance.objects.get(pk=bookmark_instance_id, user=request.user).delete()
         bookmark_instance.delete()

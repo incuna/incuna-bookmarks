@@ -39,7 +39,7 @@ class BookmarkFeed(Feed):
         return 'Bookmark Feed'
 
     def feed_updated(self):
-        qs = Bookmark.objects.all()
+        qs = Bookmark.on_site.all()
         # We return an arbitrary date if there are no results, because there
         # must be a feed_updated field as per the Atom specifications, however
         # there is no real data to go by, and an arbitrary date can be static.
@@ -56,4 +56,4 @@ class BookmarkFeed(Feed):
         return ({'href': complete_url},)
 
     def items(self):
-        return Bookmark.objects.order_by("-added")[:ITEMS_PER_FEED]
+        return Bookmark.on_site.order_by("-added")[:ITEMS_PER_FEED]
