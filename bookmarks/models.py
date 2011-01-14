@@ -32,7 +32,7 @@ class LiveBookmarkManager(models.Manager):
 
 class Bookmark(models.Model):
     
-    url = models.URLField(unique=True)
+    url = models.URLField()
     description = models.CharField(_('description'), max_length=100)
     note = models.TextField(_('note'), blank=True)
     

@@ -1,0 +1,54 @@
+[
+    {
+        "pk": 1, 
+        "model": "bookmarks.bookmark", 
+        "fields": {
+            "added": "2010-11-08 14:38:09", 
+            "description": "Incuna web site.", 
+            "url": "http://incuna.com/", 
+            "note": "", 
+            "adder": 2, 
+            "has_favicon": true, 
+            "favicon_checked": "2010-11-08 14:38:10",
+            "sites": [1]
+        }
+    },
+    {
+        "pk": 2,
+        "model": "bookmarks.bookmark",
+        "fields": {
+            "added": "2010-11-08 14:38:09",
+            "description": "Google web site.",
+            "url": "http://google.com/",
+            "note": "",
+            "adder": 2,
+            "has_favicon": true,
+            "favicon_checked": "2010-11-08 14:38:10",
+            "sites": [2]
+        }
+    },
+    {
+        "pk": 1,
+        "model": "bookmarks.bookmarkinstance",
+        "fields": {
+            "description": "Bookmark site 1 instance", 
+            "tags": "tag-site1 ",
+            "bookmark": 1,
+            "note": "Note.",
+            "user": 1,
+            "saved": "2010-02-04 13:46:09"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "bookmarks.bookmarkinstance",
+        "fields": {
+            "description": "Bookmark site 2 instance",
+            "tags": "tag-site2 ",
+            "bookmark": 2,
+            "note": "Note.",
+            "user": 1,
+            "saved": "2010-02-04 13:46:09"
+        }
+    }
+]

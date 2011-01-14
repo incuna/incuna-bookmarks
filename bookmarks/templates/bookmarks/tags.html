@@ -1,0 +1,5 @@
+<ul class="list-tags">
+        {% for t in bookmark_tags|dictsortreversed:"count"|slice:":20" %}
+            <li><a href="{% url tag_results t %}"><span>{{ t }} ({{ t.count }})</span></a></li>
+        {% endfor %}
+    </ul>
