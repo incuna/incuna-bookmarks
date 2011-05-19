@@ -13,6 +13,7 @@ setup(
     author_email='jtauber@jtauber.com',
     url='http://github.com/incuna/django-bookmarks',
     packages=find_packages(),
+    include_package_data=True,
     package_dir={'bookmarks': 'bookmarks'},
     classifiers=[
         'Development Status :: 3 - Alpha',
