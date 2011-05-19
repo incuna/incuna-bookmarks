@@ -1,16 +1,18 @@
-from distutils.core import setup
+from os.path import dirname, join
+from setuptools import find_packages, setup
+
+def fread(fname):
+    return open(join(dirname(__file__), fname)).read()
 
 setup(
     name='django-bookmarks',
     version=__import__('bookmarks').__version__,
     description='A reusable Django app for bookmark management.',
+    long_description=fread('README'),
     author='James Tauber',
     author_email='jtauber@jtauber.com',
-    url='http://code.google.com/p/django-bookmarks/',
-    packages=[
-        'bookmarks',
-        'bookmarks.migrations',
-    ],
+    url='http://github.com/incuna/django-bookmarks',
+    packages=find_packages(),
     package_dir={'bookmarks': 'bookmarks'},
     classifiers=[
         'Development Status :: 3 - Alpha',
