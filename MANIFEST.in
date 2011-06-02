@@ -1,3 +1,4 @@
 include AUTHORS
 include LICENSE
+recursive-include bookmarks/fixtures *
 recursive-include bookmarks/templates *
