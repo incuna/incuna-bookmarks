@@ -1,17 +1,19 @@
-from os.path import dirname, join
 from setuptools import find_packages, setup
+from os.path import dirname, join
+
+from bookmarks import get_version
 
 def fread(fname):
     return open(join(dirname(__file__), fname)).read()
 
 setup(
     name='django-bookmarks',
-    version=__import__('bookmarks').__version__,
+    version=get_version(),
     description='A reusable Django app for bookmark management.',
     long_description=fread('README'),
-    author='James Tauber',
-    author_email='jtauber@jtauber.com',
-    url='http://github.com/incuna/django-bookmarks',
+    author='Incuna Ltd',
+    author_email='admin@incuna.com',
+    url='http://github.com/incuna/incuna-bookmarks',
     packages=find_packages(),
     include_package_data=True,
     package_dir={'bookmarks': 'bookmarks'},
