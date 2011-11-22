@@ -7,7 +7,7 @@ def fread(fname):
     return open(join(dirname(__file__), fname)).read()
 
 setup(
-    name='django-bookmarks',
+    name='incuna-bookmarks',
     version=get_version(),
     description='A reusable Django app for bookmark management.',
     long_description=fread('README'),
