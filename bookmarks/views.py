@@ -1,18 +1,18 @@
 from datetime import datetime
 import urllib2
 
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
-
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 
 from bookmarks.models import Bookmark, BookmarkInstance
 from bookmarks.forms import BookmarkInstanceForm
+
 
 def bookmarks(request, template_name="bookmarks/bookmarks.html"):
     bookmarks = Bookmark.on_site.all().order_by("-added")
