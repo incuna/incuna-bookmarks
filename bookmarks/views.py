@@ -3,6 +3,7 @@ import urllib2
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -65,7 +66,7 @@ def add(request, form_class=BookmarkInstanceForm,
             if bookmark_form.should_redirect():
                 return HttpResponseRedirect(bookmark.url)
             else:
-                request.user.message_set.create(message=_("You have saved bookmark '%(description)s'") % {'description': bookmark_instance.description})
+                messages.info(request, _("You have saved bookmark '{0}'".format(bookmark_instance.description)))
                 return HttpResponseRedirect(reverse("bookmarks.views.bookmarks"))
     else:
         initial = {}
@@ -96,9 +97,7 @@ def delete(request, bookmark_instance_id):
     if request.user == bookmark_instance.user:
         #BookmarkInstance.objects.get(pk=bookmark_instance_id, user=request.user).delete()
         bookmark_instance.delete()
-
-        request.user.message_set.create(message=_("You have deleted bookmark '%(description)s'") % {'description': bookmark_instance.description})
-
+        messages.info(request, _("You have deleted bookmark '{0}'".format(bookmark_instance.description)))
 
     if "next" in request.GET:
         next = request.GET["next"]
