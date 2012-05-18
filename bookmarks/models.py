@@ -68,7 +68,13 @@ class Bookmark(models.Model):
     
     def all_tags_with_counts(self, min_count=False):
         return Tag.objects.usage_for_queryset(BookmarkInstance.on_site.all(), counts=True, min_count=None, filters={'bookmark': self.id})
-    
+
+    def site_slugs(self):
+        slugs = []
+        for site in self.sites.all():
+            slugs.append(site.ghtsite.slug)
+        return ' '.join(slugs)
+
     def __unicode__(self):
         return self.url
 
