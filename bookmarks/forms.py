@@ -38,3 +38,35 @@ class BookmarkInstanceForm(forms.ModelForm):
     class Meta:
         model = BookmarkInstance
         #fields = ('url', 'description', 'note', 'redirect')
+
+
+
+
+class BookmarkInstanceNoRedirectForm(forms.ModelForm):
+    url = forms.URLField(label="URL", verify_exists=True, widget=forms.TextInput(attrs={"size": 40}))
+    description = forms.CharField(max_length=100, widget=forms.TextInput(attrs={"size": 40}))
+    tags = TagField(label="Tags", required=False)
+
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user
+        super(BookmarkInstanceNoRedirectForm, self).__init__(*args, **kwargs)
+        # hack to order fields
+        self.fields.keyOrder = ['url', 'description', 'note', 'tags']
+
+    def clean(self):
+        if 'url' not in self.cleaned_data:
+            return self.cleaned_data
+        if BookmarkInstance.on_site.filter(bookmark__url=self.cleaned_data['url'], user=self.user).count() > 0:
+            raise forms.ValidationError(_("You have already bookmarked this link."))
+        return self.cleaned_data
+
+    def should_redirect(self):
+        return False
+
+    def save(self, commit=True):
+        self.instance.url = self.cleaned_data['url']
+        return super(BookmarkInstanceNoRedirectForm, self).save(commit)
+
+    class Meta:
+        model = BookmarkInstance
+        fields = ('url', 'description', 'note', 'tags')

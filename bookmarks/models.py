@@ -78,8 +78,8 @@ class Bookmark(models.Model):
     def __unicode__(self):
         return self.url
 
-    def save(self, force_insert=False, force_update=False):
-        super(Bookmark, self).save(force_insert, force_update)
+    def save(self, *args, **kwargs):
+        super(Bookmark, self).save(*args, **kwargs)
         if not self.sites:
             current_site = Site.objects.get_current()
             self.sites.add(current_site)
@@ -106,17 +106,18 @@ class BookmarkInstance(models.Model):
 
     objects = models.Manager()# The default manager.
     on_site = LiveBookmarkInstanceManager()
-    
-    def save(self, force_insert=False, force_update=False):
-        try:
-            bookmark = Bookmark.on_site.get(url=self.url)
-        except Bookmark.DoesNotExist:
-            # has_favicon=False is temporary as the view for adding bookmarks will change it
-            bookmark = Bookmark(url=self.url, description=self.description, note=self.note, has_favicon=False, adder=self.user)
-            bookmark.save()
-            bookmark.sites.add(Site.objects.get_current())
-        self.bookmark = bookmark
-        super(BookmarkInstance, self).save(force_insert, force_update)
+
+    def save(self, *args, **kwargs):
+        if not self.bookmark:
+            try:
+                bookmark = Bookmark.on_site.get(url=self.url)
+            except Bookmark.DoesNotExist:
+                # has_favicon=False is temporary as the view for adding bookmarks will change it
+                bookmark = Bookmark(url=self.url, description=self.description, note=self.note, has_favicon=False, adder=self.user)
+                bookmark.save()
+                bookmark.sites.add(Site.objects.get_current())
+            self.bookmark = bookmark
+        super(BookmarkInstance, self).save(*args, **kwargs)
     
     def delete(self):
         bookmark = self.bookmark
