@@ -11,7 +11,7 @@ class BookmarkIndex(SearchIndex, Indexable):
     summary = CharField(model_attr='note')
     sites = CharField(model_attr='site_slugs')
 
-    def index_queryset(self):
+    def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()
 

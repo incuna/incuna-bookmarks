@@ -1,3 +1,9 @@
+0.6.1
+=====
+
+* Update `index_queryset` with keyword argument for Haystack.
+
+
 0.6.0
 =====
 
