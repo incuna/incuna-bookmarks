@@ -1,9 +1,9 @@
-from haystack.indexes import CharField, DateTimeField, RealTimeSearchIndex, Indexable
+from haystack.indexes import CharField, DateTimeField, SearchIndex, Indexable
 
 from models import Bookmark
 
 
-class BookmarkIndex(RealTimeSearchIndex, Indexable):
+class BookmarkIndex(SearchIndex, Indexable):
     text = CharField(document=True, use_template=True)
     title = CharField(model_attr='description')
     author = CharField(model_attr='adder')
