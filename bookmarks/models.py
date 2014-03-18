@@ -31,29 +31,26 @@ class LiveBookmarkManager(models.Manager):
 
 
 class Bookmark(models.Model):
-    
     url = models.URLField(max_length=511)
-    description = models.CharField(_('description'), max_length=100)
+    description = models.TextField(_('description'))
     note = models.TextField(_('note'), blank=True)
-    
+
     has_favicon = models.BooleanField(_('has favicon'))
     favicon_checked = models.DateTimeField(_('favicon checked'), default=datetime.now)
-    
+
     adder = models.ForeignKey(User, related_name="added_bookmarks", verbose_name=_('adder'))
     added = models.DateTimeField(_('added'), default=datetime.now)
 
     sites = models.ManyToManyField(Site)
 
-    objects = models.Manager()# The default manager.
+    objects = models.Manager()  # The default manager.
     on_site = LiveBookmarkManager()
-    
-    # tags = TagField()
-    
+
     def get_favicon_url(self, force=False):
         """
         return the URL of the favicon (if it exists) for the site this
         bookmark is on other return None.
-        
+
         If force=True, the URL will be calculated even if it doesn't
         exist.
         """
@@ -62,10 +59,10 @@ class Bookmark(models.Model):
             favicon_url = urlparse.urljoin(base_url, 'favicon.ico')
             return favicon_url
         return None
-    
+
     def all_tags(self, min_count=False):
         return Tag.objects.usage_for_queryset(BookmarkInstance.on_site.all(), counts=False, min_count=None, filters={'bookmark': self.id})
-    
+
     def all_tags_with_counts(self, min_count=False):
         return Tag.objects.usage_for_queryset(BookmarkInstance.on_site.all(), counts=True, min_count=None, filters={'bookmark': self.id})
 
@@ -83,9 +80,10 @@ class Bookmark(models.Model):
         if not self.sites:
             current_site = Site.objects.get_current()
             self.sites.add(current_site)
-    
+
     class Meta:
-        ordering = ('-added', )
+        ordering = ('-added',)
+
 
 # Manager for bookmark instances only returns those that belong to current site.
 class LiveBookmarkInstanceManager(models.Manager):
@@ -93,20 +91,20 @@ class LiveBookmarkInstanceManager(models.Manager):
         current_site = Site.objects.get_current()
         return super(LiveBookmarkInstanceManager, self).get_query_set().filter(bookmark__sites=current_site).distinct()
 
+
 class BookmarkInstance(models.Model):
-    
     bookmark = models.ForeignKey(Bookmark, related_name="saved_instances", verbose_name=_('bookmark'))
     user = models.ForeignKey(User, related_name="saved_bookmarks", verbose_name=_('user'))
     saved = models.DateTimeField(_('saved'), default=datetime.now)
-    
-    description = models.CharField(_('description'), max_length=100)
+
+    description = models.TextField(_('description'))
     note = models.TextField(_('note'), blank=True)
-    
+
     tags = TagField()
 
-    objects = models.Manager()# The default manager.
+    objects = models.Manager()  # The default manager.
     on_site = LiveBookmarkInstanceManager()
-    
+
     def save(self, force_insert=False, force_update=False):
         try:
             bookmark = Bookmark.on_site.get(url=self.url)
@@ -117,12 +115,12 @@ class BookmarkInstance(models.Model):
             bookmark.sites.add(Site.objects.get_current())
         self.bookmark = bookmark
         super(BookmarkInstance, self).save(force_insert, force_update)
-    
+
     def delete(self):
         bookmark = self.bookmark
         super(BookmarkInstance, self).delete()
         if bookmark.saved_instances.all().count() == 0:
             bookmark.delete()
-    
+
     def __unicode__(self):
         return _("%(bookmark)s for %(user)s") % {'bookmark':self.bookmark, 'user':self.user}
