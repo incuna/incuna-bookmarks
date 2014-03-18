@@ -32,7 +32,7 @@ class LiveBookmarkManager(models.Manager):
 
 class Bookmark(models.Model):
     url = models.URLField(max_length=511)
-    description = models.CharField(_('description'), max_length=100)
+    description = models.TextField(_('description'))
     note = models.TextField(_('note'), blank=True)
 
     has_favicon = models.BooleanField(_('has favicon'))
@@ -96,8 +96,8 @@ class BookmarkInstance(models.Model):
     bookmark = models.ForeignKey(Bookmark, related_name="saved_instances", verbose_name=_('bookmark'))
     user = models.ForeignKey(User, related_name="saved_bookmarks", verbose_name=_('user'))
     saved = models.DateTimeField(_('saved'), default=datetime.now)
-    
-    description = models.CharField(_('description'), max_length=100)
+
+    description = models.TextField(_('description'))
     note = models.TextField(_('note'), blank=True)
 
     tags = TagField()
