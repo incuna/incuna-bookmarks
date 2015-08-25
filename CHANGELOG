@@ -1,3 +1,8 @@
+0.7.1
+=====
+
+* Fix `django.conf.urls.defaults` for Django 1.6.
+
 0.7.0
 =====
 

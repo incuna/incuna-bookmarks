@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 # for voting
 from voting.views import vote_on_object
@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^your_bookmarks/$', 'bookmarks.views.your_bookmarks', name="your_bookmarks"),
     url(r'^add/$', 'bookmarks.views.add', name="add_bookmark"),
     url(r'^(\d+)/delete/$', 'bookmarks.views.delete', name="delete_bookmark_instance"),
-    
+
     # for voting
     (r'^(?P<object_id>\d+)/(?P<direction>up|down|clear)vote/?$',
         vote_on_object, dict(
