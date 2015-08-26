@@ -1,3 +1,8 @@
+0.7.2
+=====
+
+* Set `BooleanField` default explicitly to `False` for Django 1.6.
+
 0.7.1
 =====
 
