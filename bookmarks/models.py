@@ -35,7 +35,7 @@ class Bookmark(models.Model):
     description = models.TextField(_('description'))
     note = models.TextField(_('note'), blank=True)
 
-    has_favicon = models.BooleanField(_('has favicon'))
+    has_favicon = models.BooleanField(_('has favicon'), default=False)
     favicon_checked = models.DateTimeField(_('favicon checked'), default=datetime.now)
 
     adder = models.ForeignKey(User, related_name="added_bookmarks", verbose_name=_('adder'))
