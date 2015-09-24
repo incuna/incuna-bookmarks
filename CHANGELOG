@@ -1,3 +1,8 @@
+1.0.0
+=====
+
+* Replace `get_query_set` with `get_queryset`.
+
 0.7.3
 =====
 
