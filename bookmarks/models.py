@@ -25,9 +25,9 @@ bookmark but allows for per-user tagging.
 
 # Manager for bookmarks only returns those that belong to current site.
 class LiveBookmarkManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         current_site = Site.objects.get_current()
-        return super(LiveBookmarkManager, self).get_query_set().filter(sites=current_site)
+        return super(LiveBookmarkManager, self).get_queryset().filter(sites=current_site)
 
 
 class Bookmark(models.Model):
@@ -87,9 +87,9 @@ class Bookmark(models.Model):
 
 # Manager for bookmark instances only returns those that belong to current site.
 class LiveBookmarkInstanceManager(models.Manager):
-    def get_query_set(self):
+    def get_queryset(self):
         current_site = Site.objects.get_current()
-        return super(LiveBookmarkInstanceManager, self).get_query_set().filter(bookmark__sites=current_site).distinct()
+        return super(LiveBookmarkInstanceManager, self).get_queryset().filter(bookmark__sites=current_site).distinct()
 
 
 class BookmarkInstance(models.Model):
