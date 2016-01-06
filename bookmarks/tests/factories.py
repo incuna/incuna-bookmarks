@@ -5,6 +5,8 @@ from ..models import Bookmark, BookmarkInstance
 
 
 class UserFactory(factory.DjangoModelFactory):
+    username = factory.Sequence('user-{}'.format)
+
     class Meta:
         model = User
 
