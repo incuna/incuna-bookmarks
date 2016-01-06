@@ -44,7 +44,8 @@ class BookmarkInstanceForm(forms.ModelForm):
             return False
 
     def save(self, commit=True):
-        self.instance.url = self.cleaned_data['url']
+        url = self.cleaned_data['url']
+        self.instance.bookmark = self.instance.get_or_create_bookmark(url)
         return super(BookmarkInstanceForm, self).save(commit)
 
     class Meta:

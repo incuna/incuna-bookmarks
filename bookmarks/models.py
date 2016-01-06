@@ -105,16 +105,21 @@ class BookmarkInstance(models.Model):
     objects = models.Manager()  # The default manager.
     on_site = LiveBookmarkInstanceManager()
 
-    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+    def get_or_create_bookmark(self, url):
         try:
-            bookmark = Bookmark.on_site.get(url=self.url)
+            bookmark = Bookmark.on_site.get(url=url)
         except Bookmark.DoesNotExist:
             # has_favicon=False is temporary as the view for adding bookmarks will change it
-            bookmark = Bookmark(url=self.url, description=self.description, note=self.note, has_favicon=False, adder=self.user)
+            bookmark = Bookmark(
+                url=url,
+                description=self.description,
+                note=self.note,
+                has_favicon=False,
+                adder=self.user,
+            )
             bookmark.save()
             bookmark.sites.add(Site.objects.get_current())
-        self.bookmark = bookmark
-        super(BookmarkInstance, self).save(force_insert, force_update, *args, **kwargs)
+        return bookmark
 
     def delete(self):
         bookmark = self.bookmark
