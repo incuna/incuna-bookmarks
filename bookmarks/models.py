@@ -64,7 +64,11 @@ class Bookmark(models.Model):
         return Tag.objects.usage_for_queryset(BookmarkInstance.on_site.all(), counts=False, min_count=None, filters={'bookmark': self.id})
 
     def all_tags_with_counts(self, min_count=False):
-        return Tag.objects.usage_for_queryset(BookmarkInstance.on_site.all(), counts=True, min_count=None, filters={'bookmark': self.id})
+        return Tag.objects.usage_for_queryset(
+            BookmarkInstance.on_site.filter(bookmark=self.pk),
+            counts=True,
+            min_count=None,
+        )
 
     def site_slugs(self):
         slugs = []

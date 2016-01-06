@@ -19,5 +19,8 @@ class BookmarkFactory(factory.DjangoModelFactory):
 
 
 class BookmarkInstanceFactory(factory.DjangoModelFactory):
+    bookmark = factory.SubFactory(BookmarkFactory)
+    user = factory.SubFactory(UserFactory)
+
     class Meta:
         model = BookmarkInstance
