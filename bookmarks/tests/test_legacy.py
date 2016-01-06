@@ -11,7 +11,8 @@ from voting.models import Vote
 
 
 class UserBookmarksTests(TestCase):
-    fixtures = ['accountdata.json', 'bookmarks.json', 'sites.json']
+    # FIXME: update the fixtures so they load, or replace with setUp method
+    # fixtures = ['accountdata.json', 'bookmarks.json', 'sites.json']
 
     def checkAddBookmark(self, test_url = 'http://google.com/', test_description = 'test bookmark description', user=None):
         ' Check if new "add bookmark" page works. Can be used to check if new bookmark is added or if existing bookmark is saved. '
