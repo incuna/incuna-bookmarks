@@ -75,8 +75,8 @@ class Bookmark(models.Model):
     def __unicode__(self):
         return self.url
 
-    def save(self, force_insert=False, force_update=False):
-        super(Bookmark, self).save(force_insert, force_update)
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
+        super(Bookmark, self).save(force_insert, force_update, *args, **kwargs)
         if not self.sites:
             current_site = Site.objects.get_current()
             self.sites.add(current_site)
@@ -105,7 +105,7 @@ class BookmarkInstance(models.Model):
     objects = models.Manager()  # The default manager.
     on_site = LiveBookmarkInstanceManager()
 
-    def save(self, force_insert=False, force_update=False):
+    def save(self, force_insert=False, force_update=False, *args, **kwargs):
         try:
             bookmark = Bookmark.on_site.get(url=self.url)
         except Bookmark.DoesNotExist:
@@ -114,7 +114,7 @@ class BookmarkInstance(models.Model):
             bookmark.save()
             bookmark.sites.add(Site.objects.get_current())
         self.bookmark = bookmark
-        super(BookmarkInstance, self).save(force_insert, force_update)
+        super(BookmarkInstance, self).save(force_insert, force_update, *args, **kwargs)
 
     def delete(self):
         bookmark = self.bookmark
