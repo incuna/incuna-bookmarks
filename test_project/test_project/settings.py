@@ -12,13 +12,19 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = (
+    'bookmarks',
+    'tagging',
+
     'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 )
+
+SITE_ID = 1
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
