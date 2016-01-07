@@ -1,11 +1,10 @@
 from datetime import datetime
 import urlparse
-from django.contrib.sites.models import Site
 
 from django.db import models
+from django.conf import settings
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
-
-from django.contrib.auth.models import User
 
 from tagging.fields import TagField
 from tagging.models import Tag
@@ -38,7 +37,7 @@ class Bookmark(models.Model):
     has_favicon = models.BooleanField(_('has favicon'), default=False)
     favicon_checked = models.DateTimeField(_('favicon checked'), default=datetime.now)
 
-    adder = models.ForeignKey(User, related_name="added_bookmarks", verbose_name=_('adder'))
+    adder = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="added_bookmarks", verbose_name=_('adder'))
     added = models.DateTimeField(_('added'), default=datetime.now)
 
     sites = models.ManyToManyField(Site)
@@ -98,7 +97,7 @@ class LiveBookmarkInstanceManager(models.Manager):
 
 class BookmarkInstance(models.Model):
     bookmark = models.ForeignKey(Bookmark, related_name="saved_instances", verbose_name=_('bookmark'))
-    user = models.ForeignKey(User, related_name="saved_bookmarks", verbose_name=_('user'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="saved_bookmarks", verbose_name=_('user'))
     saved = models.DateTimeField(_('saved'), default=datetime.now)
 
     description = models.TextField(_('description'))
