@@ -2,7 +2,8 @@
 coverage==4.0.3
 Django==1.8.8
 django-tagging==0.4
-django-voting==0.2
+#django-voting==0.3 # The line below can be replaced with this when 0.3 exists.
+-e git+git://github.com/incuna/django-voting.git@18ea78185997645917cdde9c09930ce2964d090e#egg=django-voting
 dj-database-url==0.3.0
 factory-boy==2.6.0
 psycopg2==2.6.1
