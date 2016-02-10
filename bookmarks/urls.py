@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url
+from django.views.decorators.csrf import csrf_exempt
 
 # for voting
 from voting.views import vote_on_object
@@ -12,7 +13,7 @@ urlpatterns = patterns('',
 
     # for voting
     (r'^(?P<object_id>\d+)/(?P<direction>up|down|clear)vote/?$',
-        vote_on_object, dict(
+        csrf_exempt(vote_on_object), dict(
             model=Bookmark,
             template_object_name='bookmark',
             template_name='kb/link_confirm_vote.html',
