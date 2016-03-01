@@ -27,10 +27,12 @@ def bookmarks(request, template_name="bookmarks/bookmarks.html"):
 
 @login_required
 def your_bookmarks(request, template_name="bookmarks/your_bookmarks.html"):
-    bookmark_instances = BookmarkInstance.on_site.filter(user=request.user).order_by("-saved")
+    bookmark_instances = BookmarkInstance.on_site.filter(user=request.user)
+    bookmark_instances = bookmark_instances.order_by("-saved")
     return render_to_response(template_name, {
         "bookmark_instances": bookmark_instances,
     }, context_instance=RequestContext(request))
+
 
 @login_required
 def add(request, form_class=BookmarkInstanceForm,
@@ -51,7 +53,9 @@ def add(request, form_class=BookmarkInstanceForm,
             if bookmark_form.should_redirect():
                 return HttpResponseRedirect(bookmark.url)
             else:
-                messages.info(request, _("You have saved bookmark '{0}'".format(bookmark_instance.description)))
+                message = _("You have saved bookmark '{}'")
+                message = message.format(bookmark_instance.description)
+                messages.info(request, message)
                 return HttpResponseRedirect(reverse("bookmarks.views.bookmarks"))
     else:
         initial = {}
@@ -68,21 +72,29 @@ def add(request, form_class=BookmarkInstanceForm,
             bookmark_form = form_class()
 
     bookmarks_add_url = "http://" + Site.objects.get_current().domain + reverse(add)
-    bookmarklet = "javascript:location.href='%s?url='+encodeURIComponent(location.href)+';description='+encodeURIComponent(document.title)+';redirect=on'" % bookmarks_add_url
+    bookmarklet = ';'.join((
+        "javascript:location.href='{}?url='+encodeURIComponent(location.href)+'",
+        "description='+encodeURIComponent(document.title)+'",
+        "redirect=on'",
+    )).format(bookmarks_add_url)
 
-    return render_to_response(template_name, {
-        "bookmarklet": bookmarklet,
-        "bookmark_form": bookmark_form,
-    }, context_instance=RequestContext(request))
+    return render_to_response(
+        template_name,
+        {"bookmarklet": bookmarklet, "bookmark_form": bookmark_form},
+        context_instance=RequestContext(request))
+
 
 @login_required
 def delete(request, bookmark_instance_id):
-
-    bookmark_instance = get_object_or_404(BookmarkInstance.on_site.all(), id=bookmark_instance_id)
+    bookmark_instance = get_object_or_404(
+        BookmarkInstance.on_site.all(),
+        id=bookmark_instance_id,
+    )
     if request.user == bookmark_instance.user:
-        #BookmarkInstance.objects.get(pk=bookmark_instance_id, user=request.user).delete()
         bookmark_instance.delete()
-        messages.info(request, _("You have deleted bookmark '{0}'".format(bookmark_instance.description)))
+        message = _("You have deleted bookmark '{}'")
+        message = message.format(bookmark_instance.description)
+        messages.info(request, message)
 
     if "next" in request.GET:
         next = request.GET["next"]
@@ -90,4 +102,3 @@ def delete(request, bookmark_instance_id):
         next = reverse("bookmarks.views.bookmarks")
 
     return HttpResponseRedirect(next)
-
