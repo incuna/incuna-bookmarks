@@ -14,7 +14,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'bookmarks',
     'tagging',
-    'voting',
 
     'django.contrib.admin',
     'django.contrib.contenttypes',
