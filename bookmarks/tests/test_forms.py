@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.test import TestCase
+from django.utils import timezone
 
 from ..forms import BookmarkInstanceForm
 from .factories import BookmarkFactory, UserFactory
@@ -17,7 +16,7 @@ class TestBookmarkInstanceForm(TestCase):
             u'description': description,
             u'bookmark': bookmark.pk,
             u'user': user.pk,
-            u'saved': datetime.now(),
+            u'saved': timezone.now(),
         }
 
         form = BookmarkInstanceForm(data=data)
