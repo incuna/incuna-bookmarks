@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
@@ -7,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from bookmarks.models import Bookmark, BookmarkInstance
@@ -47,7 +46,7 @@ def add(request, form_class=BookmarkInstanceForm,
             bookmark = bookmark_instance.bookmark
 
             bookmark.has_favicon = False
-            bookmark.favicon_checked = datetime.now()
+            bookmark.favicon_checked = timezone.now()
             bookmark.save()
 
             if bookmark_form.should_redirect():

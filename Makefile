@@ -8,5 +8,5 @@ release:
 	python setup.py register -r incuna sdist upload -r incuna
 
 test:
-	coverage run test_project/manage.py test
+	coverage run test_project/manage.py test --keepdb
 	coverage report
